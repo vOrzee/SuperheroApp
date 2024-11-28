@@ -47,7 +47,7 @@ struct InfoView: View {
                     List(repository.heroes, id: \.name) { hero in
                         NavigationLink(destination: InfoDetails(hero: hero)) {
                             InfoRow(
-                                url: URL(string: hero.images.sm) ?? URL(string: "https://play-lh.googleusercontent.com/dTIaYyKOw2-DD1DGU7jKFhgZXPuEyHGSFEwE_xpWSCSSAii9Jwu8JstmSd1m3VowsNUj")!,
+                                url: URL(string: hero.images.sm),
                                 cacheKey: "\(hero.id)-sm",
                                 name: hero.name
                             )

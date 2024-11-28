@@ -9,16 +9,23 @@ import SwiftUI
 
 struct InfoRow: View {
     
-    let url: URL
+    let url: URL?
     let cacheKey: String
     let name: String
     
     var body: some View {
         HStack {
-            CachedAsyncImage(url: url, cacheKey: cacheKey)
-                .frame(width: 50, height: 50)
-                .cornerRadius(16.0)
-                .padding(.trailing, 8.0)
+            if let url = url {
+                CachedAsyncImage(url: url, cacheKey: cacheKey)
+                    .frame(width: 50, height: 50)
+                    .cornerRadius(16.0)
+                    .padding(.trailing, 8.0)
+            } else {
+                Image(uiImage: UIImage(named: "Placeholder")!)
+                    .frame(width: 50, height: 50)
+                    .cornerRadius(16.0)
+                    .padding(.trailing, 8.0)
+            }
             Text(name)
                 .lineLimit(1)
                 .truncationMode(.tail)
