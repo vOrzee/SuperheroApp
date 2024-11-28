@@ -8,27 +8,24 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @State private var notificationsEnabled = false
-    @State private var selectedTheme = "Тёмная"
-    @State private var volume: Double = 50
-    
-    let themes = ["Светлая", "Тёмная", "Системная"]
+    @Environment(\.colorScheme) var colorScheme
+    @Binding var titleOn: Bool
     
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Основные настройки")) {
-                    Toggle("Включить уведомления", isOn: $notificationsEnabled)
-                    Picker("Тема", selection: $selectedTheme) {
-                        ForEach(themes, id: \.self) { theme in
-                            Text(theme)
-                        }
-                    }
+                Section(header: Text("Внешний вид")) {
+                    Text(colorScheme == .light ? "Light Theme enabled" : "Dark Theme enabled")
                 }
-                
-                Section(header: Text("Настройки звука")) {
-                    Slider(value: $volume, in: 0...100)
-                    Text("Громкость: \(Int(volume))%")
+                Section(header: Text("List Settings")) {
+                    Toggle("Show Navigation Title", isOn: $titleOn)
+                        .padding(.vertical, 4)
+                    
+                    if titleOn {
+                        Text("Navigation title enabled")
+                            .foregroundColor(.gray)
+                            .padding(.top, 4)
+                    }
                 }
             }
             .navigationTitle("Настройки")
@@ -37,5 +34,5 @@ struct SettingsView: View {
 }
 
 #Preview {
-    SettingsView()
+    SettingsView(titleOn: .constant(true))
 }

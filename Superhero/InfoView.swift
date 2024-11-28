@@ -9,6 +9,7 @@ import SwiftUI
 
 struct InfoView: View {
     @StateObject private var repository = HeroesRepositoryNetworkImpl.shared
+    var titleOn: Bool
 
     var body: some View {
         NavigationView {
@@ -55,7 +56,7 @@ struct InfoView: View {
                     }
                 }
             }
-            .navigationTitle("Супергерои")
+            .navigationTitle(titleOn ? "Супергерои" : "")
         }
     }
 }
