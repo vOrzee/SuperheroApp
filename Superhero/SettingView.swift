@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(\.colorScheme) var colorScheme
-    @Binding var titleOn: Bool
+    @AppStorage("titleOn") private var titleOn: Bool = true
     
     var body: some View {
         NavigationView {
@@ -34,5 +34,5 @@ struct SettingsView: View {
 }
 
 #Preview {
-    SettingsView(titleOn: .constant(true))
+    SettingsView()
 }

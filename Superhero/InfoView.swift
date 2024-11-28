@@ -9,7 +9,7 @@ import SwiftUI
 
 struct InfoView: View {
     @StateObject private var repository = HeroesRepositoryNetworkImpl.shared
-    var titleOn: Bool
+    @AppStorage("titleOn") private var titleOn: Bool = true
 
     var body: some View {
         NavigationView {
