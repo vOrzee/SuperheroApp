@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct InfoView: View {
-    @StateObject private var repository = HeroesRepositoryNetworkImpl.shared
+    @ObservedObject var repository: HeroesRepositoryNetworkImpl
     @AppStorage("titleOn") private var titleOn: Bool = true
     @AppStorage("rowHeight") private var rowHeight: Double = 60.0
 
@@ -22,6 +22,24 @@ struct InfoView: View {
                         Text("Пожалуйста, подождите")
                             .foregroundColor(.gray)
                             .padding(.top, 8.0)
+                    }
+                }
+                else if repository.heroes.isEmpty {
+                    VStack {
+                        Text("Нет данных")
+                            .font(.headline)
+                            .foregroundColor(.gray)
+                    }
+                } else if !repository.heroes.isEmpty {
+                    List(repository.heroes, id: \.name) { hero in
+                        NavigationLink(destination: InfoDetails(hero: hero)) {
+                            InfoRow(
+                                url: URL(string: hero.images.sm),
+                                cacheKey: "\(hero.id)-sm",
+                                name: hero.name
+                            )
+                            .frame(height: rowHeight)
+                        }
                     }
                 } else if let error = repository.error {
                     VStack {
@@ -39,24 +57,8 @@ struct InfoView: View {
                         }
                         .padding(.top, 8.0)
                     }
-                } else if repository.heroes.isEmpty {
-                    VStack {
-                        Text("Нет данных")
-                            .font(.headline)
-                            .foregroundColor(.gray)
-                    }
-                } else {
-                    List(repository.heroes, id: \.name) { hero in
-                        NavigationLink(destination: InfoDetails(hero: hero)) {
-                            InfoRow(
-                                url: URL(string: hero.images.sm),
-                                cacheKey: "\(hero.id)-sm",
-                                name: hero.name
-                            )
-                            .frame(height: rowHeight)
-                        }
-                    }
                 }
+                
             }
             .navigationTitle(titleOn ? "Супергерои" : "")
         }
@@ -64,5 +66,5 @@ struct InfoView: View {
 }
 
 #Preview {
-    ContentView()
+    InfoView(repository: HeroesRepositoryNetworkImpl())
 }

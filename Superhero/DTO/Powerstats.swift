@@ -12,4 +12,15 @@ struct Powerstats: Codable, Equatable {
     let durability: Int
     let power: Int
     let combat: Int
+    
+    func asArray() -> [(title: String, value: Int)] {
+        return [
+            ("Интеллект", intelligence),
+            ("Сила", strength),
+            ("Скорость", speed),
+            ("Выносливость", durability),
+            ("Мощь", power),
+            ("Бой", combat)
+        ]
+    }
 }
