@@ -13,6 +13,7 @@ struct SettingsView: View {
     @AppStorage("rowHeight") private var rowHeight: Double = 60.0
     @State private var isChanging: Bool = false
     @State private var hero: Hero? = nil
+    @ObservedObject var repository: HeroesRepositoryNetworkImpl
     
     var body: some View {
         NavigationView {
@@ -44,12 +45,12 @@ struct SettingsView: View {
             }
             .navigationTitle("Настройки")
             .task {
-                hero = await HeroesRepositoryNetworkImpl.shared.fetchHero(byId: 1)
+                hero = await repository.fetchHero(byId: 1)
             }
         }
     }
 }
 
 #Preview {
-    SettingsView()
+    SettingsView(repository: HeroesRepositoryNetworkImpl())
 }

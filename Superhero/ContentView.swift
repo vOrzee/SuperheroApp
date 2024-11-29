@@ -8,21 +8,26 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var repository = HeroesRepositoryNetworkImpl()
+    @AppStorage("idSelectedHero") private var idSelectedHero: Int = 0
     
     var body: some View {
         TabView {
-            InfoView()
+            InfoView(repository: repository)
                 .tabItem {
                     Label("Герои", systemImage: "person.crop.circle.badge.checkmark")
                 }
-            HelloView()
+            HeroStatsView(repository: repository)
                 .tabItem {
-                    Label("Привет", systemImage: "hand.wave")
+                    Label("Stats", systemImage: "chart.pie.fill")
                 }
-            SettingsView()
+            SettingsView(repository: repository)
                 .tabItem {
                     Label("Настройки", systemImage: "gearshape")
                 }
+        }
+        .onAppear {
+            idSelectedHero = 0
         }
     }
 }

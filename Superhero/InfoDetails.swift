@@ -10,6 +10,7 @@ import SwiftUI
 struct InfoDetails: View {
     
     let hero: Hero
+    @AppStorage("idSelectedHero") private var idSelectedHero: Int = 0
     
     var body: some View {
         ScrollView {
@@ -46,6 +47,9 @@ struct InfoDetails: View {
                         .fill(Color(.systemGray6))
                 )
             }
+        }
+        .onAppear {
+            idSelectedHero = hero.id
         }
     }
 }

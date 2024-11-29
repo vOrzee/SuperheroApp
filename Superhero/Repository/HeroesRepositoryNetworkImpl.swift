@@ -8,13 +8,12 @@ import Foundation
 import SwiftUI
 
 @MainActor
-class HeroesRepositoryNetworkImpl: HeroesRepositoryProtocol {
-    static let shared = HeroesRepositoryNetworkImpl()
+class HeroesRepositoryNetworkImpl: HeroesRepositoryProtocol, ObservableObject {
     @Published private(set) var heroes: [Hero] = []
     @Published private(set) var isLoading: Bool = false
     @Published private(set) var error: AppError?
     
-    private init() {
+    init() {
         Task {
             await fetchHeroes()
         }
