@@ -8,30 +8,44 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @State private var notificationsEnabled = false
-    @State private var selectedTheme = "Тёмная"
-    @State private var volume: Double = 50
-    
-    let themes = ["Светлая", "Тёмная", "Системная"]
+    @Environment(\.colorScheme) var colorScheme
+    @AppStorage("titleOn") private var titleOn: Bool = true
+    @AppStorage("rowHeight") private var rowHeight: Double = 60.0
+    @State private var isChanging: Bool = false
+    @State private var hero: Hero? = nil
     
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Основные настройки")) {
-                    Toggle("Включить уведомления", isOn: $notificationsEnabled)
-                    Picker("Тема", selection: $selectedTheme) {
-                        ForEach(themes, id: \.self) { theme in
-                            Text(theme)
-                        }
+                Section(header: Text("Внешний вид")) {
+                    Text(colorScheme == .light ? "Light Theme enabled" : "Dark Theme enabled")
+                }
+                Section(header: Text("Заголовки")) {
+                    Toggle("Показать навигационные заголовки", isOn: $titleOn)
+                        .padding(.vertical, 4)
+                    
+                    if titleOn {
+                        Text("Navigation title enabled")
+                            .foregroundColor(.gray)
+                            .padding(.top, 4)
                     }
                 }
-                
-                Section(header: Text("Настройки звука")) {
-                    Slider(value: $volume, in: 0...100)
-                    Text("Громкость: \(Int(volume))%")
+                Section(header: Text("Высота строки")) {
+                    Slider(value: $rowHeight, in: 55.0...95.0, step: 1.0) { editing in
+                        isChanging = editing
+                    }
+                    Text("Высота строки: \(Int(rowHeight))")
+                    
+                    if isChanging, let hero = hero {
+                        InfoRow(url: URL(string: hero.images.sm), cacheKey: "\(hero.id)-sm", name: hero.name)
+                            .frame(height: rowHeight)
+                    }
                 }
             }
             .navigationTitle("Настройки")
+            .task {
+                hero = await HeroesRepositoryNetworkImpl.shared.fetchHero(byId: 1)
+            }
         }
     }
 }

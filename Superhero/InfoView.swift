@@ -9,6 +9,8 @@ import SwiftUI
 
 struct InfoView: View {
     @StateObject private var repository = HeroesRepositoryNetworkImpl.shared
+    @AppStorage("titleOn") private var titleOn: Bool = true
+    @AppStorage("rowHeight") private var rowHeight: Double = 60.0
 
     var body: some View {
         NavigationView {
@@ -51,11 +53,12 @@ struct InfoView: View {
                                 cacheKey: "\(hero.id)-sm",
                                 name: hero.name
                             )
+                            .frame(height: rowHeight)
                         }
                     }
                 }
             }
-            .navigationTitle("Супергерои")
+            .navigationTitle(titleOn ? "Супергерои" : "")
         }
     }
 }
